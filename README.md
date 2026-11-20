@@ -4,9 +4,7 @@
 |---|---|
 | **Student** | Chioma Ameh |
 | **Registration number** | C11/26/CGRCE/17567 |
-| **Course** | GRC103 – Risk Assessment and Management Techniques |
-| **Submission deadline** | 22 Nov 2026, 11:59 PM WAT |
-| **Date performed** | 19–20 Nov 2026 |
+| **Course** | GRC103: Risk Assessment and Management Techniques |
 
 > Lab note: only dummy files were used. Passwords, agent keys and other secrets are concealed in all evidence.
 
