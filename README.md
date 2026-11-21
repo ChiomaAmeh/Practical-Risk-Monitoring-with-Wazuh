@@ -4,7 +4,11 @@
 |---|---|
 | **Student** | Chioma Ameh |
 | **Registration number** | C11/26/CGRCE/17567 |
-| **Course** | GRC103: Risk Assessment and Management Techniques |
+| **Course** | GRC103 – Risk Assessment and Management Techniques |
+| **Submission deadline** | 22 Nov 2026, 11:59 PM WAT |
+| **Date performed** | 19–20 Nov 2026 |
+
+**Demonstration video:** [FILL: paste the video link here]
 
 > Lab note: only dummy files were used. Passwords, agent keys and other secrets are concealed in all evidence.
 
@@ -23,16 +27,19 @@ A risk assessment rated **unauthorised modification or deletion of financial for
               Both on the same LAN via VirtualBox Bridged Adapter
 ```
 
+![SSH login from the Windows host to the Ubuntu VM](evidence/00a-ssh-login.png)
+![Windows host network configuration (192.168.100.3)](evidence/00b-windows-ipconfig-b.png)
+
 ### Software versions
 
 | Component | Version |
 |---|---|
-| Host OS | [FILL: Windows version, run `winver`] |
-| VirtualBox | [FILL: Help > About] |
+| Host OS | Microsoft Windows 11 Pro, version 10.0.26300 (build 26300) |
+| VirtualBox | 7.2.6 (r172322) |
 | Ubuntu VM | Ubuntu 24.04.5 LTS (noble), kernel 6.8.0-149-generic; VirtualBox VM `ubuntu-server` (hostname `ubuntu`): 2 vCPU, 5.8 GiB RAM (6144 MB), 23 GB root volume on a 25 GB virtual disk, Bridged adapter on Wi-Fi |
 | Wazuh manager | 4.12.0, all-in-one (manager, indexer, dashboard, Filebeat) installed with `wazuh-install.sh -a -i`; installation completed 19 Nov 2026, 17:32 UTC |
 | Wazuh agent | 4.12.0 on Windows 11 Pro (agent name Finance-Dept-Workstation, ID 001) |
-| Browser | [FILL] |
+| Browser | Microsoft Edge 157.0.4341.60 |
 
 | Item | Value |
 |---|---|
@@ -45,14 +52,24 @@ A risk assessment rated **unauthorised modification or deletion of financial for
 ### 3.1 Deployment (Evidence 1)
 Wazuh was deployed on the Ubuntu VM using the all-in-one installer from the lab brief.
 
-![Ubuntu details](evidence/01-ubuntu-platform-details.png)
-![Dashboard access](evidence/02-dashboard-login-success.png)
+![Ubuntu platform details (a)](evidence/01a-ubuntu-platform-a.png)
+![Ubuntu platform details (b)](evidence/01b-ubuntu-platform-b.png)
+![VirtualBox VM details](evidence/01c-virtualbox-vm-details.png)
+![VirtualBox settings: system and storage](evidence/01d-vbox-settings-system-storage.png)
+![VirtualBox settings: Bridged network adapter](evidence/01d-vbox-settings-storage-network.png)
+![Firewall rules restricted to lab host](evidence/01e-ufw-rules.png)
+![Wazuh version and IP](evidence/02c-ip-addr-and-wazuh-version.png)
+![Manager and indexer services active](evidence/02b-manager-indexer-active.png)
+![Dashboard service active](evidence/02b-dashboard-service-active.png)
+![Dashboard login page (https://192.168.100.17)](evidence/02-dashboard-login-page.png)
+![Dashboard access after login (credentials not shown)](evidence/02-dashboard-login-success.png)
 
 ### 3.2 Agent registration (Evidence 2)
 Agent key generated with `manage_agents` on the manager and applied in the Windows Wazuh Agent Manager.
 
-![Agents active](evidence/03-agent-active.png)
-![agent_control output](evidence/04-agent-control-list.png)
+![Agent before registration (no key imported)](evidence/03c-agent-before-registration.png)
+![Agent service running on Windows](evidence/03b-agent-installed.png)
+![Agent Active on the manager (agent_control -i 001)](evidence/04b-agent-details.png)
 
 ### 3.3 Monitoring configuration (Evidence 3)
 Excerpt from `C:\Program Files (x86)\ossec-agent\ossec.conf` (no secrets):
@@ -64,7 +81,9 @@ Excerpt from `C:\Program Files (x86)\ossec-agent\ossec.conf` (no secrets):
 </syscheck>
 ```
 
-![ossec.log confirms realtime monitoring](evidence/05-ossec-log-monitoring-path.png)
+![ossec.conf excerpt](evidence/05-ossec-conf-excerpt.png)
+![Agent connected to manager](evidence/05b-agent-connected-log.png)
+![Manager address in ossec.conf](evidence/05c-ossec-conf-manager-address.png)
 
 ### 3.4 Control verification (Evidence 4)
 
@@ -84,11 +103,14 @@ Excerpt from `C:\Program Files (x86)\ossec-agent\ossec.conf` (no secrets):
 | Modified | 550 | Integrity checksum changed | 22:20:17 UTC (23:20:17 WAT); size 0→45 bytes; md5, sha1, sha256 changed | Yes, same second |
 | Deleted | 553 | File deleted | 22:20:47 UTC (23:20:47 WAT); size 45 | Yes, same second |
 
-![File added alert](evidence/06-alert-file-added.png)
-![File modified alert (checksums before/after)](evidence/07-alert-file-modified.png)
-![File deleted alert](evidence/08-alert-file-deleted.png)
 
-Exported alerts: `logs/alerts-export.json` / `logs/alerts-export.csv`.
+![Timestamped test log](evidence/09-test-log.png)
+![Alerts on the manager (command line)](evidence/06-alerts-cli.png)
+![Deleted event in the Wazuh dashboard (Discover, syscheck)](evidence/08b-dashboard-discover-deleted-event.png)
+
+Alerts as logged by the manager: `logs/fim-alerts-from-manager.txt` (transcribed from `evidence/06-alerts-cli.png`). Test log: `logs/test-log.csv`.
+
+**Monitoring coverage and retention.** Absence of alerts is not treated as proof that nothing changed. Coverage was verified before testing: the agent was *Active* (`agent_control -i 001`: Windows 11 Pro, Wazuh v4.12.0, recent keep-alive), the monitored path is present in `ossec.conf` with `realtime="yes"`, and each alert shows `Mode: realtime`. Alerts are kept in `/var/ossec/logs/alerts/` and the Wazuh indexer; no retention policy was configured or tested in this short lab, so no conclusion is drawn about periods outside the test window.
 
 ---
 
@@ -117,7 +139,7 @@ Exported alerts: `logs/alerts-export.json` / `logs/alerts-export.csv`.
 **Three metrics for management:**
 1. **FIM event volume by type, path and time** (added/modified/deleted per week), showing activity levels and trends.
 2. **Agent coverage / availability**: percentage of in-scope endpoints with agent status *Active* during the period (a control that is offline provides no assurance).
-3. **Alerts by rule ID and severity level, with the top changed file paths** (Events dashboard breakdown), used to prioritise triage. Detection latency (file event time in the test log vs alert time in the dashboard) is reported as a supporting figure.
+3. **Alerts by rule ID and severity level, with the top changed file paths** (Events dashboard breakdown), used to prioritise triage. Detection latency (file event time in the test log vs alert time in the dashboard) is reported as a supporting figure; in this lab each alert carried the same timestamp second as its action, so latency was under one second.
 
 **Why central monitoring improves governance and auditability.** One consolidated, time-synchronised audit trail across all endpoints replaces checking logs machine by machine. Logs are harder for a local attacker to alter or delete, retention and access are managed centrally, reporting and sampling for auditors is faster and consistent, and gaps in coverage are visible in one place. This supports accountability, segregation of duties (monitoring separate from the monitored user) and repeatable evidence.
 
@@ -160,15 +182,21 @@ Absence of alerts is only meaningful if steps 1 and 3 are verified; otherwise it
 - The installer printed the generated admin password on screen. It was copied to a private file outside the repository and no screenshot showing it is included.
 - An older Wazuh agent installation on the Windows host was configured for a different manager (192.168.100.25) and was left without a service or executables. It was uninstalled, its folder deleted, and the agent reinstalled and pointed at the lab manager (192.168.100.17).
 - The manager VM's 23 GB root volume reached 100% because the vulnerability-detection feed downloaded about 13 GB into `/var/ossec/queue`. This caused database write errors (`wazuh-db: error assigning groups to agent`), so the agent was connected on the endpoint but `Never connected` on the manager. Vulnerability detection is not needed for FIM; it was disabled, the temporary feed files were deleted, and the agent then showed Active.
+- A second, unused Host-Only network adapter is attached to the VM; it was not used. A pre-existing firewall rule (80/tcp from 192.168.56.101) from earlier use of the VM was left unchanged and is unrelated to the lab traffic.
+
+### Troubleshooting screenshots
+
+- [Firewall before the fix](evidence/troubleshooting/90-ufw-before.png), [ping works](evidence/troubleshooting/91-ping-ok.png), [port 22 blocked](evidence/troubleshooting/91-port22-false.png), [port 22 open after the fix](evidence/troubleshooting/92-port22-true.png)
+- [Manager database errors](evidence/troubleshooting/98-manager-group-errors.png), [VM out of space](evidence/troubleshooting/99-vm-no-space-left.png), [disk 100% full](evidence/troubleshooting/99b-df-full.png), [after cleanup](evidence/troubleshooting/99c-after-cleanup.png)
 
 ## 7. Evidence checklist
 
-- [ ] E1 Deployment: Ubuntu details + dashboard access (credentials hidden)
-- [ ] E2 Agent registered: Active status
-- [ ] E3 Configuration: path + `ossec.conf` excerpt (no secrets)
-- [ ] E4 Create/modify/delete alerts + timestamped test log
-- [ ] E5 GRC report (this document)
-- [ ] Name, registration number, versions, architecture, limitations
+- [x] E1 Deployment: Ubuntu details + dashboard access (credentials hidden)
+- [x] E2 Agent registered: Active status
+- [x] E3 Configuration: path + `ossec.conf` excerpt (no secrets)
+- [x] E4 Create/modify/delete alerts + timestamped test log
+- [x] E5 GRC report (this document)
+- [x] Name, registration number, versions, architecture, limitations
 - [ ] Demonstration video (live or recorded) for instructor
 
 ## 8. Suggested repository layout
@@ -176,7 +204,8 @@ Absence of alerts is only meaningful if steps 1 and 3 are verified; otherwise it
 ```
 README.md
 configs/ossec-fim-excerpt.xml
-evidence/01-...png ... 08-...png
-logs/test-log.csv
-logs/alerts-export.json
+evidence/*.png                    (deployment, agent, configuration and alert screenshots)
+evidence/troubleshooting/*.png    (screenshots of problems solved during the lab)
+logs/test-log.csv                 (timestamped create/modify/delete log)
+logs/fim-alerts-from-manager.txt  (the three FIM alerts as logged by the manager)
 ```
