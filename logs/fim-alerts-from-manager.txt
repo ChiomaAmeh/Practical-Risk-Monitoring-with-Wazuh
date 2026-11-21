@@ -1,0 +1,31 @@
+# FIM alerts as logged by the Wazuh manager (/var/ossec/logs/alerts/alerts.log)
+# Transcribed from the command output shown in evidence/06-alerts-cli.png:
+#   sudo grep -i -B3 -A4 "sensitivefiles" /var/ossec/logs/alerts/alerts.log
+# Times are UTC (the manager clock); WAT = UTC+1.
+
+** Alert 1795213187.4281929: - ossec,syscheck,syscheck_entry_added,syscheck_file,pci_dss_11.5,gpg13_4.11,gdpr_II_5.1.f,hipaa_164.312.c.1,hipaa_164.312.c.2,nist_800_53_SI.7,tsc_PI1.4,tsc_PI1.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Nov 20 22:19:47 (Finance-Dept-Workstation) any->syscheck
+Rule: 554 (level 5) -> 'File added to the system.'
+File 'c:\users\user\sensitivefiles\q4_financial_forecast.docx' added
+Mode: realtime
+
+Attributes:
+ - Size: 0
+--
+** Alert 1795213217.4283201: - ossec,syscheck,syscheck_entry_modified,syscheck_file,pci_dss_11.5,gpg13_4.11,gdpr_II_5.1.f,hipaa_164.312.c.1,hipaa_164.312.c.2,nist_800_53_SI.7,tsc_PI1.4,tsc_PI1.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Nov 20 22:20:17 (Finance-Dept-Workstation) any->syscheck
+Rule: 550 (level 7) -> 'Integrity checksum changed.'
+File 'c:\users\user\sensitivefiles\q4_financial_forecast.docx' modified
+Mode: realtime
+Changed attributes: size,mtime,md5,sha1,sha256
+Size changed from '0' to '45'
+Old modification time was: '1795213187', now it is '1795213217'
+--
+** Alert 1795213247.4292389: - ossec,syscheck,syscheck_entry_deleted,syscheck_file,pci_dss_11.5,gpg13_4.11,gdpr_II_5.1.f,hipaa_164.312.c.1,hipaa_164.312.c.2,nist_800_53_SI.7,tsc_PI1.4,tsc_PI1.5,tsc_CC6.1,tsc_CC6.8,tsc_CC7.2,tsc_CC7.3,
+2026 Nov 20 22:20:47 (Finance-Dept-Workstation) any->syscheck
+Rule: 553 (level 7) -> 'File deleted.'
+File 'c:\users\user\sensitivefiles\q4_financial_forecast.docx' deleted
+Mode: realtime
+
+Attributes:
+ - Size: 45
