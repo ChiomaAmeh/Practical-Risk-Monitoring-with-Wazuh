@@ -1,0 +1,10 @@
+<!-- Excerpt from C:\Program Files (x86)\ossec-agent\ossec.conf on the Windows endpoint (no secrets) -->
+<client>
+  <server>
+    <address>192.168.100.17</address>
+  </server>
+</client>
+
+<syscheck>
+  <directories realtime="yes">C:\Users\USER\SensitiveFiles</directories>
+</syscheck>
