@@ -1,0 +1,29 @@
+GRC103 Practical Lab - Timestamped File Integrity Monitoring Test Log
+Student: Chioma Ameh | Registration No: C11/26/CGRCE/17567
+Date: 22 November 2026
+Wazuh Manager: icdfa-server (192.168.100.20, Wazuh v4.12.0)
+Monitored Endpoint: CHIOMA-ESQ (Agent ID: 004, IP: 192.168.100.3, Windows 11 Pro 10.0.26300.9974, Agent v4.12.0)
+Monitored Path: C:\Users\Chioma Ameh\SensitiveFiles
+Test File: Q4_Financial_Forecast.docx
+========================================================================================
+
+[1] 22 Nov 2026 @ 17:49:35.341 | Action: added
+Command: echo Initial Q4 financial forecast draft > "C:\Users\Chioma Ameh\SensitiveFiles\Q4_Financial_Forecast.docx"
+Rule: Rule 554 (Level 5) - File added to the system. (Decoder: syscheck_new_entry, Mode: realtime)
+Details: Initial file created (38 bytes) and baseline integrity hashes recorded.
+
+[2] 22 Nov 2026 @ 17:50:05.8xx | Action: modified
+Command: echo Revised Q4 revenue figures added >> "C:\Users\Chioma Ameh\SensitiveFiles\Q4_Financial_Forecast.docx"
+Rule: Rule 550 (Level 7) - Integrity checksum changed. (Decoder: syscheck_integrity_changed, Mode: realtime)
+Details: Changed attributes: size, mtime, md5, sha1, sha256; size changed from '38' to '73';
+         old md5sum: '84015bd84ac259e5920a7d6e2a3a5838' -> new md5sum: '88c6a7a64ebe5e69b43d0c22b4c40669'.
+
+[3] 22 Nov 2026 @ 17:50:29.5xx | Action: deleted
+Command: del "C:\Users\Chioma Ameh\SensitiveFiles\Q4_Financial_Forecast.docx"
+Rule: Rule 553 (Level 7) - File deleted. (Decoder: syscheck_integrity_changed / syscheck_entry_deleted)
+Compliance Mappings: MITRE ATT&CK (T1070.004, T1485), NIST SP 800-53 (SI.7), PCI DSS (11.5),
+                     HIPAA (164.312.c.1, 164.312.c.2), GDPR (II_5.1.f).
+
+Analytical Caveat: An absence of alerts should not be interpreted on its own as proof that no
+changes occurred unless continuous agent connectivity, active real-time folder coverage in
+ossec.conf, and intact log ingestion/retention on icdfa-server are verified.
