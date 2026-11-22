@@ -1,0 +1,9 @@
+<!-- Sanitized Wazuh Windows Agent FIM Configuration Excerpt -->
+<!-- Agent: CHIOMA-ESQ (ID: 004, IP: 192.168.100.3) | Manager: icdfa-server (192.168.100.20) -->
+<!-- All registration keys, passwords, and secrets excluded -->
+
+<syscheck>
+  <disabled>no</disabled>
+  <!-- Real-time File Integrity Monitoring for sensitive financial forecast files -->
+  <directories realtime="yes">C:\Users\Chioma Ameh\SensitiveFiles</directories>
+</syscheck>
