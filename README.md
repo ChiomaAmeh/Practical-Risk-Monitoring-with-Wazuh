@@ -4,7 +4,7 @@
 |---|---|
 | **Student** | Chioma Ameh |
 | **Registration number** | C11/26/CGRCE/17567 |
-| **Course** | GRC103 – Risk Assessment and Management Techniques |
+| **Course** | GRC103 - Risk Assessment and Management Techniques |
 | **Date performed** | 19–20 Nov 2026 |
 
 **Demonstration video:** 
