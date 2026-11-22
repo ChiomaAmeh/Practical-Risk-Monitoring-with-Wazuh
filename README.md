@@ -1,4 +1,4 @@
-# GRC103 — Practical Risk Monitoring with Wazuh (File Integrity Monitoring)
+# GRC103 - Practical Risk Monitoring with Wazuh (File Integrity Monitoring)
 
 - **Student:** Chioma Ameh
 - **Registration Number:** `C11/26/CGRCE/17567`
@@ -9,11 +9,9 @@
 
 ## Repository Structure
 
-- `configs/` — Sanitized `ossec.conf` `<syscheck>` configuration excerpt (keys and secrets excluded).
-- `evidence/` — Full lab report (`GRC103_Wazuh_FIM_Lab_Report_Chioma_Ameh-v3.docx`) and numbered evidence screenshots (`01`–`07`).
-- `logs/` — Timestamped FIM test log (`added`, `modified`, `deleted` for `Q4_Financial_Forecast.docx`) and 2.5-minute video walkthrough script.
-- `README.md` — Course lab summary and directory guide.
+- `configs/` - Sanitized `ossec.conf` `<syscheck>` configuration excerpt (keys and secrets excluded).
+- `evidence/` - Full lab report (`GRC103_Wazuh_FIM_Lab_Report_Chioma_Ameh-v3.docx`) and numbered evidence screenshots (`01`–`07`).
+- `logs/` - Timestamped FIM test log (`added`, `modified`, `deleted` for `Q4_Financial_Forecast.docx`) 
+- `README.md` - Course lab summary and directory guide.
 
-## Caveat
 
-Do not interpret an absence of alerts on its own as proof that no changes occurred without verifying continuous agent connectivity, active real-time folder coverage, and intact log retention.
